@@ -16,7 +16,7 @@ test02: test02.c
 
 .PHONY: clean
 clean:
-	rm -f $(FILES)
+	rm -f $(FILES) ./cassertion_log/*
 
 .PHONY: cassertion
 cassertion:

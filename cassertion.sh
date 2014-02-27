@@ -7,6 +7,7 @@
 function run_test() {
 	binary="$1"
 	eof="$2"
+	logpath="$3"
 	
 	if [[ ! -f ./$binary ]]; then
 		echo "cassert error: $binary is not a file"
@@ -16,7 +17,8 @@ function run_test() {
 		echo "cassert error: $binary is not executable"
 	fi
 	
-	./$binary $eof
+	echo $logpath
+	./$binary $eof >> $logpath 2>&1
 }
 
 # --------------------------------------------------------------------------
@@ -35,6 +37,7 @@ done
 config=${config:-"./cassertion_settings.txt"}
 logfile=${logfile:-"$(date +%d.%m.%Y-%H:%M:%S.log)"}
 logdir=${logdir:-"./cassertion_log/"}
+logpath=$logdir$logfile
 make_cmd=${make_cmd:-"make"}
 testdir=${testdir:-"./"}
 
@@ -48,7 +51,7 @@ fi
 # Have we a test that will be run alone?
 while IFS=':' read binary eof run_opt ; do
 	if [[ "$run_opt" == "1" ]] ; then
-		run_test $binary $eof
+		run_test $binary $eof $logpath
 		exit 0
 	fi
 done < $config
@@ -63,7 +66,7 @@ while IFS=':' read binary eof run_opt ; do
 		continue
 	fi
 
-	run_test $binary $eof
+	run_test $binary $eof $logpath
 
 	if [[ "$run_opt" == "3" ]] ; then
 		exit 0
