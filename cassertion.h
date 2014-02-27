@@ -12,7 +12,7 @@
 #include "omp.h"
 #else
 #include <sys/times.h>
-#endif
+#endif /* USE_OMP */
 
 typedef struct cassertion {
 	/*
@@ -27,7 +27,7 @@ typedef struct cassertion {
 	double time_prev;
 #ifndef USE_OMP
 	struct timeval tv;
-#endif
+#endif /* USE_OMP */
 
 	int passed_assertions;
 	int failed_assertions;
@@ -53,13 +53,13 @@ cassertion_t cassertion;
 #define CASSERTION_TIME(void) BEGIN \
 	cassertion.time = omp_get_wtime(); \
 	END
-#else
+#else /* USE_OMP */
 #define CASSERTION_TIME(void) BEGIN \
 	gettimeofday(&cassertion.tv, NULL); \
 	cassertion.time = (cassertion.tv.tv_sec) * 1000 + (cassertion.tv.tv_usec) \
 		/ 1000; \
 	END
-#endif
+#endif /* USE_OMP */
 
 /*
  * Example usage:
