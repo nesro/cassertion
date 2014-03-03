@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#function usage() {
-#	echo "cassertion.sh -c config_file -f log_file -l log_dir -m make -t test_dir"
-#}
+function usage() {
+	echo "cassertion.sh -c config_file -f log_file -l log_dir -m make -t test_dir"
+}
 
 function run_test() {
 	binary="$1"
