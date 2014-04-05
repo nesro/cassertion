@@ -38,8 +38,26 @@ typedef struct cassertion {
  */
 cassertion_t cassertion;
 
+/*
+ * Cassertion macros are like function so they're wrapped in
+ * a do-while(0) cycle. You MUST add a semicolon (;) after them.
+ * Like this:
+ * CASSERTION_SOMETHING(arg0, arg1);
+ *                       semicolon ^
+ */
 #define BEGIN do {
 #define END } while(0)
+
+#define CASSERTION_LOG(type) BEGIN \
+	fprintf(STREAM, "@cassertion_" type "|%s|%d|%s|", __FILE__, __LINE__, \
+			__FUNCTION__); \
+	END
+
+#define CASSERTION_VARDUMP(print, var) BEGIN \
+	CASSERTION_LOG("vardump"); \
+	fprintf(STREAM, print, var); \
+	END
+
 
 /*
  * TODO: If things will get more complicated, use settings with flags.
@@ -69,11 +87,15 @@ cassertion_t cassertion;
  * file|line|function|time#|result
  *
  * # time between CASSERTION_TIME() and CASSERTION(...) in microseconds
- */
-#define CASSERTION(condition, message, ...) BEGIN \
-	fprintf(STREAM, "@cassertion_log|%s|%d|%s|", __FILE__, __LINE__, \
+ *
+ *
+ *
+ * fprintf(STREAM, "@cassertion_test|%s|%d|%s|", __FILE__, __LINE__, \
 					__FUNCTION__); \
 	\
+ */
+#define CASSERTION(condition, message, ...) BEGIN \
+	CASSERTION_LOG("test"); \
 	if (cassertion.time > 0) { \
 		cassertion.time_prev = cassertion.time; \
 		CASSERTION_TIME(); \
