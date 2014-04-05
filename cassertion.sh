@@ -43,11 +43,6 @@ testdir=${testdir:-"./"}
 
 mkdir -p $logdir
 
-if cd $testdir && $make_cmd clean && ! $make_cmd ; then
-	echo "Build the source with $make in $testdir has failed"
-	exit 1
-fi
-
 # Have we a test that will be run alone?
 while IFS=':' read binary eof run_opt ; do
 	if [[ "$run_opt" == "1" ]] ; then
